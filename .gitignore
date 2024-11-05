@@ -396,3 +396,10 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+
+# web app settings in dev mode
+appsettings.Development.json
+
+# vs code files
+*.sln
+.vscode
