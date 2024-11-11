@@ -1,4 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
+using NAudio.Lame;
+using NAudio.Wave;
 using YoutubeExplode;
 using YoutubeExplode.Common;
 using YoutubeExplode.Videos.Streams;
@@ -65,17 +67,27 @@ public class HomeController : Controller
                 Directory.CreateDirectory(directoryPath);
             }
 
-            // Percorso file
-            var filePath = Path.Combine(directoryPath, $"{video.Title} - mdlr.mp3");
+            // Percorso file audio originale
+            var tempFilePath = Path.Combine(directoryPath, $"{video.Title}_temp.{audioStreamInfo.Container}");
             
-            // Scarica il flusso audio
-            await using (var output = System.IO.File.Create(filePath))
+            // Scarica il flusso audio nel formato originale
+            await using (var output = System.IO.File.Create(tempFilePath))
             {
                 await _youtubeClient.Videos.Streams.CopyToAsync(audioStreamInfo, output);
             }
 
-            // Carica il file dal server e forzane il download nel browser
-            var fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read);
+            // Percorso file MP3 convertito
+            var mp3FilePath = Path.Combine(directoryPath, $"{video.Title} - mdlr.mp3");
+
+            // Conversione a MP3 a 320 kbps
+            using (var reader = new MediaFoundationReader(tempFilePath))
+            using (var writer = new LameMP3FileWriter(mp3FilePath, reader.WaveFormat, 320))
+            {
+                reader.CopyTo(writer);
+            }
+
+            // Carica il file MP3 per il download
+            var fileStream = new FileStream(mp3FilePath, FileMode.Open, FileAccess.Read);
             var contentType = "audio/mpeg";  // Tipo MIME per MP3
             var fileDownloadName = $"{video.Title} - mdlr.mp3";
 

@@ -5,8 +5,8 @@
     @foreach(var result in Model)
     {
         string embedLink = result.Url.Replace("/watch?v=", "/embed/");
-        <div class="col-12 col-md-6 col-xl-4">
-            <iframe src="@embedLink" frameborder="0"></iframe>
+        <div class="col-12 col-md-6 col-xl-4 mb-3">
+            <iframe src="@embedLink" frameborder="0" width="420px" height="240px"></iframe>
             <p class="small text-truncate mb-0">@result.Title</p>
             <p class="small text-primary">@result.Url</p>
         </div>
