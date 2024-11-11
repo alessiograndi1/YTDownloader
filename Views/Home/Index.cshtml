@@ -3,14 +3,62 @@
 }
 
 <div class="text-center mt-5">
-    <h1 class="display-4">Welcome to YTDownloader</h1>
-    <form id="search-form" class="mt-5">
+    <form id="search-form" method="post" class="mt-5" asp-action="Download" asp-controller="Home">
         <div class="input-group">
-            <input type="text" class="form-control py-3" name="request" placeholder="Insert the video URL or the name">
+            <input type="text" class="form-control py-3" name="query" required 
+                placeholder="Insert the video URL or the name">
             <button type="submit" class="btn btn-lg btn-primary">Search</button>
         </div>
     </form>
-    <section id="search-results"> 
-        
-    </section>
 </div>
+<section id="search-results" class="row align-items-center mt-5" data-url="@Url.Action("GetSearchResults", "Home")">
+
+</section>
+
+@section Scripts
+{
+    <script>
+
+        const searchForm = document.getElementById('search-form');
+        searchForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = new FormData(searchForm);
+            // Recupera il nome o l'url del video dal form
+            const query = formData.get('query');
+            if(query.includes('https://')) {
+                const response = await fetch(searchForm.action, { method: 'POST', body: formData });
+                if (response.ok) {
+                    const contentDisposition = response.headers.get('Content-Disposition');
+                    if (contentDisposition && contentDisposition.includes("attachment")) {
+                        // Recupera il nome del file dal Content-Disposition
+                        const fileName = contentDisposition.split('filename=')[1].replace(/"/g, '');
+                        // Ottieni il contenuto come blob
+                        const blob = await response.blob();
+                        // Crea un URL per il blob e avvia il download
+                        const downloadUrl = window.URL.createObjectURL(blob);
+                        const a = document.createElement('a');
+                        a.href = downloadUrl;
+                        a.download = fileName;
+                        document.body.appendChild(a);
+                        a.click();
+                        a.remove();
+                        // Rilascia l'URL creato per il blob
+                        window.URL.revokeObjectURL(downloadUrl);
+                    }
+                } else {
+                    alert(`Error download`);
+                }
+            } else {
+                const searchResults = document.getElementById('search-results');
+                searchResults.innerHTML = `
+                    <div class="text-muted">Searching ... </div>
+                `;
+                const url = searchResults.dataset.url;
+                const response = await fetch(`${url}?query=${query}`);
+                searchResults.innerHTML = await response.text();
+            }
+            searchForm.reset();
+        });
+    
+    </script>
+}
