@@ -3,6 +3,7 @@ using NAudio.Lame;
 using NAudio.Wave;
 using YoutubeExplode;
 using YoutubeExplode.Common;
+using YoutubeExplode.Videos;
 using YoutubeExplode.Videos.Streams;
 using YTDownloader.Models;
 
@@ -39,10 +40,10 @@ public class HomeController : Controller
         return PartialView("_SearchResults", videos);
     }
 
-    [HttpPost("download")]
-    public async Task<IActionResult> Download([FromForm] VideoRequest request)
+    [HttpGet("download")]
+    public async Task<IActionResult> Download(string url)
     {
-        if (string.IsNullOrEmpty(request.Query))
+        if (string.IsNullOrEmpty(url))
         {
             return BadRequest("L'URL del video non è valido");
         }
@@ -50,7 +51,7 @@ public class HomeController : Controller
         try
         {
             // Ottieni informazioni sul video
-            var videoId = YoutubeExplode.Videos.VideoId.Parse(request.Query);
+            var videoId = YoutubeExplode.Videos.VideoId.Parse(url);
             var video = await _youtubeClient.Videos.GetAsync(videoId);
 
             // Ottieni il flusso audio del video
