@@ -7,22 +7,29 @@
     <title>@ViewData["Title"] - YTDownloader</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/lib/font-awesome/all.min.css" asp-append-version="true"/>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&amp;display=swap">
 </head>
 
 <body>
-    <header>
-        
-    </header>
 
     <main class="container" style="margin-bottom: 4rem;">
         @RenderBody()
     </main>
 
-    <footer class="border-top footer bg-light fixed-bottom p-3 text-muted">
+    <footer class="border-top bg-light fixed-bottom p-3 text-muted">
         <div class="container">
             &copy; 2024 - YTDownloader
         </div>
     </footer>
+
+    <div id="loader">
+        <div id="loader-background"></div>
+        <div class="d-flex justify-content-center align-items-center h-100">
+            <div class="spinner-border"></div>
+            <div class="spinner-text">Searching ...</div>
+        </div>
+    </div>
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>

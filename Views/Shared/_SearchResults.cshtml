@@ -4,14 +4,18 @@
 {
     @foreach(var result in Model)
     {
-        string embedLink = result.Url.Replace("/watch?v=", "/embed/");
-        <div class="col-12 col-md-6 col-xl-4 mb-4">
-            <iframe src="@embedLink" frameborder="0" width="420px" height="230px"></iframe>
-            <div class="d-flex align-items-center justify-content-between">
-                <p class="small text-truncate mb-0">@result.Title</p>
-                <a class="btn btn-sm btn-secondary" href="@Url.Action("Download", "Home", new { Url = result.Url })">download</a>
+        if(result.Url != null)
+        {
+            string embedLink = result.Url.Replace("/watch?v=", "/embed/");
+            <div class="col-12 col-md-6 col-xl-4 mb-4">
+                <iframe src="@embedLink" frameborder="0" width="420px" height="230px"></iframe>
+                <div class="d-flex align-items-center justify-content-end">
+                    <a class="btn btn-sm btn-danger" href="@Url.Action("Download", "Home", new { Url = result.Url })">
+                        <i class="fas fa-download"></i>&nbsp;&nbsp;Download mp3   
+                    </a>
+                </div>
             </div>
-        </div>
+        }
     }
 }
 else

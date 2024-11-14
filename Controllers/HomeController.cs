@@ -34,7 +34,9 @@ public class HomeController : Controller
             .Select(video => new VideoResult
             {
                 Title = video.Title,
-                Url = video.Url
+                Url = video.Url,
+                Duration = video.Duration,
+                Author = video.Author.ChannelTitle
             });
         
         return PartialView("_SearchResults", videos);

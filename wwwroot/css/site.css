@@ -12,3 +12,36 @@ html {
   position: relative;
   min-height: 100%;
 }
+
+#loader {
+  display: none;
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 100000;
+}
+#loader #loader-background {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  backdrop-filter: blur(2px);
+  background: rgba(18,38,63,.7);
+}
+#loader .spinner-border {
+  width: 5rem;
+  height: 5rem;
+  border-width: .45em;
+  color: #a5b2c5;
+}
+#loader .spinner-text {
+  position: relative;
+  font-size: large;
+  font-weight: bold;
+  color: #a5b2c5;
+  top: 80px;
+  right: 85px;
+}

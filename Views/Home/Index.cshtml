@@ -7,7 +7,7 @@
         <div class="input-group">
             <input type="text" class="form-control py-3" name="query" required 
                 placeholder="Search results or paste the link to direct download">
-            <button type="submit" class="btn btn-lg btn-primary">Search</button>
+            <button type="submit" class="btn btn-lg btn-primary"><i class="fas fa-search"></i></button>
         </div>
     </form>
 </div>
@@ -21,6 +21,7 @@
 
         const searchForm = document.getElementById('search-form');
         searchForm.addEventListener('submit', async (e) => {
+            $('#loader').show();
             e.preventDefault();
             const formData = new FormData(searchForm);
             // Recupera il nome o l'url del video dal form
@@ -50,13 +51,11 @@
                 }
             } else {
                 const searchResults = document.getElementById('search-results');
-                searchResults.innerHTML = `
-                    <div class="text-muted">Searching ... </div>
-                `;
                 const url = searchResults.dataset.url;
                 const response = await fetch(`${url}?query=${query}`);
                 searchResults.innerHTML = await response.text();
             }
+            $('#loader').hide();
             searchForm.reset();
         });
     
